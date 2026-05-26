@@ -1,0 +1,45 @@
+import pandas as pd, numpy as np
+import matplotlib.pyplot as plt
+from scipy import stats
+
+from sklearn.datasets import load_wine
+
+# Загрузка данных
+wine = load_wine()
+data = wine.data
+target = wine.target
+target_names = wine.target_names
+feature_names = wine.feature_names
+alcohol = data[:, 0]
+
+# Распределение по алкогольному проценту
+low_alcohol = len(alcohol[alcohol < 12.5])
+medium_alcohol = len(alcohol[(alcohol >= 12.5) & (alcohol < 13.5)])
+high_alcohol = len(alcohol[alcohol >= 13.5])
+
+counts = [low_alcohol, medium_alcohol, high_alcohol]
+categories = ['Низкое (<12.5)', 'Среднее (12.5–13.5)', 'Высокое (≥13.5)']
+explode = [0] * len(counts)
+explode[np.argmax(counts)] = 0.1
+plt.pie(counts,
+        labels=categories,
+        autopct='%2.1f%%',
+        explode=explode,
+        startangle=130)
+plt.title('Распределение вин по содержанию алкоголя')
+plt.show()
+
+# Распределение вин по сортам
+
+unique, counts = np.unique(target, return_counts=True)
+labels = ['Пьемонт', 'Тоскана', 'Венето']
+colors = ['#ff6b6b', '#4ecdc4', '#ffe66d']
+
+plt.pie(counts,
+        labels=labels,
+        colors=colors,
+        autopct='%1.1f%%',
+        explode=[0.05] * 3,
+        shadow=True)
+plt.title('Распределение вин по сортам')
+plt.show()
