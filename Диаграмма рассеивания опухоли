@@ -1,0 +1,70 @@
+import pandas as pd, numpy as np
+import matplotlib.pyplot as plt
+from scipy import stats
+
+from sklearn.datasets import load_breast_cancer
+
+# Загрузка данных
+cancer = load_breast_cancer()
+data = cancer.data
+target = cancer.target
+feature_names = cancer.feature_names
+target_names = cancer.target_names
+
+print("Названия признаков:", feature_names)
+print("Количество наблюдений:", data.shape[0])
+print("Количество признаков:", data.shape[1])
+print("Типы опухолей:", target_names)  # ['malignant' 'benign'] — злокачественные и доброкачественные
+mean_radius = data[:, 0]
+mean_area = data[:, 3]
+
+# Зависимость площади опухоли от радиуса
+scatter = plt.scatter(mean_radius, mean_area, alpha=0.5)
+plt.xlabel('Средний радиус')
+plt.ylabel('Средняя площадь')
+plt.title('Зависимость площади опухоли от радиуса')
+plt.grid(True)
+coef = np.polyfit(mean_radius, mean_area, 1)
+poly = np.poly1d(coef)
+x = np.arange(mean_radius.min(), mean_radius.max())
+plt.plot(x, poly(x), ls='--', c='r', lw=2)
+plt.show()
+
+# Сравнение размеров опухолей по типам
+radius_malignant = mean_radius[target == 0]
+area_malignant = mean_area[target == 0]
+radius_benign = mean_radius[target == 1]
+area_benign = mean_area[target == 1]
+
+mal = plt.scatter(radius_malignant,
+                  area_malignant,
+                  alpha=0.2,
+                  marker='o',
+                  c='r',
+                  label='Злокачественные')
+ben = plt.scatter(radius_benign,
+                  area_benign,
+                  alpha=0.2,
+                  marker='s',
+                  c='b',
+                  label='Доброкачественные')
+plt.xlabel('Средний радиус')
+plt.ylabel('Средняя площадь')
+plt.title('Сравнение размеров опухолей по типам')
+plt.legend()
+plt.show()
+
+# Зависимость четырёх признаков опухолей
+mean_smoothness = data[:, 5]
+mean_concavity = data[:, 7]
+
+sca = plt.scatter(mean_radius,
+                  mean_area,
+                  alpha=0.5,
+                  c=mean_smoothness,
+                  s=mean_concavity * 200)
+plt.xlabel('Средний радиус')
+plt.ylabel('Средняя площадь')
+plt.title('Зависимость четырёх признаков опухолей')
+plt.colorbar(sca, label='Средняя гладкость')
+plt.show()
