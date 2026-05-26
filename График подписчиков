@@ -1,0 +1,37 @@
+import pandas as pd, numpy as np
+import matplotlib.pyplot as plt
+
+months = np.arange(1, 13)
+month_names = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн',
+               'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек']
+
+actual = np.array([5.2, 6.8, 9.5, 11.2, 13.8, 17.5, 22.3, 24.1, 27.8, 31.2, 33.5, 34.0])
+
+forecast = np.array([5.0, 7.5, 8.5, 12.5, 14.5, 16.0, 23.5, 25.5, 26.5, 30.0, 34.5, 35.5])
+
+milestones = [10, 20, 30, 40]
+milestone_names = ['Бронза', 'Серебро', 'Золото', 'Платина']
+milestone_colors = ['brown', 'silver', 'gold', 'aqua']
+
+plt.plot(months, actual, label='actual', marker='o', color='blue', markersize=3, linewidth=1)
+plt.plot(months, forecast, label='forecast', marker='s', color='red', markersize=3)
+plt.title("Рост подписчиков YouTube-канала в 2026 году")
+plt.xlabel('Месяц')
+plt.xlabel("Подписчики (тыс.)")
+plt.ylim(0, 50)
+plt.xticks(np.arange(1, 13), month_names, rotation=45)
+plt.fill_between(months, actual, forecast,
+                 color='green',
+                 where=actual>forecast,
+                 interpolate=True,
+                 label="Факт выше прогноза")
+plt.fill_between(months, actual, forecast,
+                 color='red',
+                 interpolate=True,
+                 where=actual<forecast,
+                 label="Факт ниже прогноза")
+for milestones, milestone_name, milestone_colors in zip(milestones, milestone_names, milestone_colors):
+    plt.axhline(y=milestones, color=milestone_colors, ls='--', alpha=0.7, linewidth=1.5)
+    plt.text(13, milestones, milestone_name)
+plt.legend(loc='upper left')
+plt.show()
