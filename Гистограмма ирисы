@@ -1,0 +1,40 @@
+import pandas as pd, numpy as np
+import matplotlib.pyplot as plt
+from scipy import stats
+
+from sklearn.datasets import load_iris
+
+iris = load_iris()
+data = iris.data
+target = iris.target
+petal_length = iris.data[:, 2]
+
+# Все сорта + KDE
+density = stats.gaussian_kde(petal_length)
+x = np.linspace(1, 7, 30)
+plt.hist(petal_length, bins=20, edgecolor='black', color='g', density=True, label='Гистограмма')
+plt.plot(x, density(x), label='График плотности (KDE)')
+plt.fill_between(x, density(x), color='r', alpha=0.1)
+
+plt.grid(axis='y', alpha=0.3)
+plt.title('Распределение длины лепестка (нормированная гистограмма + KDE)')
+plt.xlabel('Длина лепестка (см)')
+plt.ylabel('Плотность вероятности')
+plt.legend(title='Гистограмма и График плотности (KDE)')
+plt.show()
+
+# По сортам
+setosa = data[target == 0, 2]
+versicolor = data[target == 1, 2]
+virginica = data[target == 2, 2]
+values = [setosa, versicolor, virginica]
+names = ['setosa', 'versicolor', 'virginica']
+colors = ['r', 'g', 'b']
+
+plt.grid(axis='y', alpha=0.3)
+for value, name, col in zip(values, names, colors):
+    plt.hist(value, bins=15, alpha=0.5, color=col, label=name)
+plt.xlabel('Длина лепестка (см)')
+plt.ylabel('Частота')
+plt.legend(title='Гистограмма по сортам')
+plt.show()
