@@ -1,0 +1,53 @@
+import pandas as pd, numpy as np
+import matplotlib.pyplot as plt
+from scipy import stats
+
+from sklearn.datasets import load_diabetes
+
+diabetes = load_diabetes()
+data = diabetes.data
+target = diabetes.target
+feature_names = diabetes.feature_names
+
+print("Названия признаков:", feature_names)
+print("Количество наблюдений:", data.shape[0])
+print("Количество признаков:", data.shape[1])
+
+bmi = data[:, 2]
+
+# Анализ ИМТ (вертикально)
+box = plt.boxplot(bmi,
+                  patch_artist=True,
+                  boxprops={'facecolor':'lightblue'},
+                  medianprops={'color':'red', 'lw':2},
+                  whiskerprops={'color':'blue', 'ls':'--'})
+plt.title('Распределение индекса массы тела у пациентов с диабетом')
+plt.ylabel('Индекс массы тела')
+plt.grid(axis='y', alpha=0.3)
+plt.show()
+
+# Анализ ИМТ (горизонтально)
+box = plt.boxplot(bmi,
+                  orientation='horizontal',
+                  showmeans=True,
+                  flierprops={'markerfacecolor':'orange', 'markersize':8})
+plt.title('Распределение индекса массы тела у пациентов с диабетом')
+plt.ylabel('Индекс массы тела')
+plt.grid(axis='x', alpha=0.3)
+plt.show()
+
+# Анализ распределений молодые/старые пациенты
+age = diabetes.data[:, 0]
+median_age = np.median(age)
+young_patients = target[age <= median_age]
+old_patients = target[age > median_age]
+
+box = plt.boxplot([young_patients, old_patients],
+                  patch_artist=True,
+                  tick_labels=['Молодые пациенты', 'Пожилые пациенты'],
+                  notch=True)
+box['boxes'][0].set_facecolor('lightgreen')
+box['boxes'][1].set_facecolor('lightskyblue')
+plt.title('Сравнение прогрессии диабета в разных возрастных группах')
+plt.ylabel('Прогрессия диабета')
+plt.show()
