@@ -1,0 +1,69 @@
+import pandas as pd, numpy as np
+import matplotlib.pyplot as plt
+from scipy import stats
+
+from sklearn.datasets import load_iris
+
+# Загрузка данных
+iris = load_iris()
+data = iris.data
+target = iris.target
+target_names = iris.target_names
+feature_names = iris.feature_names
+
+# Извлечение признаков
+sepal_length = data[:, 0]  # длина чашелистика
+sepal_width = data[:, 1]   # ширина чашелистика
+petal_length = data[:, 2]  # длина лепестка
+petal_width = data[:, 3]   # ширина лепестка
+
+print("Названия признаков:", feature_names)
+print("Названия классов:", target_names)
+print("Количество образцов:", data.shape[0])
+
+
+
+# Создаём сетку 2×2 (4 графика)
+fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(10, 8))
+
+# Строим график в левом верхнем углу. Распределение видов ирисов
+unique, counts = np.unique(target, return_counts=True)
+print(f"Виды: {target_names}")
+print(f"Количество: {counts}")
+
+axes[0, 0].pie(counts, labels=target_names, autopct='%1.1f%%')
+axes[0, 0].set_title('Распределение видов ирисов')
+
+# Правый верхний. Распределение длины чашелистика у ирисов
+sepal_length = data[:, 0]
+
+axes[0, 1].hist(sepal_length, bins=25, color='blue', alpha=0.7, edgecolor='white')
+axes[0, 1].set_title('Распределение длины чашелистика у ирисов')
+axes[0, 1].set_xlabel('Длина чашелистика (см)')
+axes[0, 1].set_ylabel('Частота')
+axes[0, 1].grid(True, alpha=0.3, ls='--')
+
+# Левый нижний. Сравнение длины чашелистика по видам
+sepal_length_setosa = sepal_length[target == 0]
+sepal_length_versicolor = sepal_length[target == 1]
+sepal_length_virginica = sepal_length[target == 2]
+
+boxes = axes[1, 0].boxplot([sepal_length_setosa, sepal_length_versicolor, sepal_length_virginica],
+                            tick_labels=['setosa', 'versicolor', 'virginica'],
+                            patch_artist=True)
+boxes['boxes'][0].set_facecolor('red')
+boxes['boxes'][1].set_facecolor('green')
+boxes['boxes'][2].set_facecolor('blue')
+axes[1, 0].set_title('Сравнение длины чашелистика по видам')
+axes[1, 0].grid(True, axis='x', alpha=0.3)
+
+# Правый нижний. Зависимость длины лепестка от ширины
+for w, l, c, n in zip([petal_width[target==i] for i in range(3)], [petal_length[target==i] for i in range(3)], ['r', 'g', 'b'], target_names):
+    axes[1, 1].scatter(w, l, alpha=0.3, c=c, label=n)
+
+axes[1, 1].set_title('Зависимость длины лепестка от ширины')
+axes[1, 1].set_xlabel('Ширина лепестка (см)')
+axes[1, 1].set_ylabel('Длина лепестка (см)')
+axes[1, 1].grid(True, alpha=0.3)
+
+plt.show()
