@@ -1,0 +1,74 @@
+'''
+Скачайте набор данных, который содержит информацию из Wiki о нескольких важных городах:
+
+Координаты (в формате угловые градусы, минуты, секунды)
+Название страны
+Признак столицы (1 - столица, 0 - нет)
+Название города
+Обратите внимание, что:
+
+градусы северной широты - положительные
+градусы южной широты - отрицательные
+градусы восточной долготы - положительные
+градусы западной долготы - отрицательные
+Т.е. мы считаем, что нулевой меридиан и нулевая параллель пересекаются в центре карты. Для задания можете использовать эту карту (или любую иную, которая вам понравится, но пожалуйста приложите её к решению).
+
+Отметьте на карте города, согласно их координатам, если их население больше 1.000.000 человек (размер маркера должен быть пропорционален населению).
+
+Столицы отметьте одним маркером (например, звёздочкой), а обычные города другим (например, кружком).
+
+Цвета всех городов одной страны должны совпадать.
+
+Используйте цвета (если вы используете случайную генерацию цвета, то допускается случайная оптическая близость цветов нескольких стран, но старайтесь чтобы их было не больше половины, а так же, чтобы отметки были различимы на карте).
+
+ 
+'''
+
+
+
+import numpy as np
+import random
+import pandas as pd
+import matplotlib.pyplot as plt
+
+pd.set_option('display.max_columns', None)
+
+df = pd.read_csv('E:\\new/cities.csv', delimiter=',')
+
+df = df[df['Population'] > 1000000]
+print(df)
+df['X'] = df['Latitude deg'] + df['Latitude min'] / 60 + df['Latitude sec'] / 3600
+df['Y'] = df['Longitude deg'] + df['Longitude min'] / 60 + df['Longitude sec'] / 3600
+
+df['X'] = df['X'] / 360 * 1920 + 960
+df['Y'] = 960 - (df['Y'] / 180 * 960 + 480)
+df = df.drop(columns=['Longitude deg', 'Longitude min', 'Longitude sec', 'Latitude deg', 'Latitude min', 'Latitude sec'])
+print(df)
+img = plt.imread('E:\\new/world.png')
+
+fig, ax = plt.subplots(figsize=(18, 10))
+ax.imshow(img)
+ax.scatter([], [], color='k', marker='*', label='Столица')
+ax.scatter([], [], color='k', marker='o', label='Не столица')
+
+
+random_color = [(random.uniform(0.1, 0.65),random.uniform(0.1, 0.65),random.uniform(0.1, 0.65)) for _ in range(df['Country'].nunique())]
+country_color = {k:v for k, v in zip(df['Country'].unique(), random_color)}
+
+for k, v in country_color.items():
+    ax.scatter([], [], color=v, marker='s', label=k)
+    
+for pop, cap, name, x, y, country in zip(df['Population'], df['Capital'], df['Name'], df['X'], df['Y'], df['Country']):
+
+    ax.text(x, y-20, name, ha='center', va='center', color=country_color[country], fontsize=9, bbox=dict(alpha=0.75,
+                                                                            boxstyle='round',
+                                                                            facecolor='w',
+                                                                            pad=0.1))
+    marker = '*' if cap == 1 else 'o'
+    ax.plot(x, y, marker=marker, markerfacecolor=country_color[country], markeredgecolor='w', markeredgewidth=0.5, markersize=pop / 5 // 1000000 + 7, ls='', label=f'{name} ({pop//1000000} млн)')
+
+
+ax.axis('off')
+ax.legend(loc='lower left', title='Города с населением \nболее 1 млн:', fontsize=10)
+plt.savefig('E:\\new\\cities.png')
+plt.show()
