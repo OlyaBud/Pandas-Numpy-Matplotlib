@@ -94,8 +94,6 @@ f(x)=(x^β+α^β) / x^β
 Не забудьте добавить легенду на каждый график. Для этого может потребоваться вызвать метод legend() для каждого объекта осей.
 
 '''
-
-
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -104,7 +102,7 @@ def f(x, alpha, beta):
     with np.errstate(all='ignore'):
         return (x ** beta + alpha ** beta) / x ** beta
 
-# Построение общего графика функции
+# 1.1 Построение общего графика функции
 x = np.linspace(-5, 5, 501)
 y1 = f(x, 1, 1)
 y2 = f(x, 2, 1)
@@ -120,12 +118,11 @@ plt.ylabel('f(x)')
 plt.title('График функции $f(x) = \\frac{x ^\\beta + \\alpha^\\beta}{x^\\beta}$ при различных $\\alpha$ и $\\beta$', fontsize=20)
 plt.ylim(-15, 20)
 plt.legend()
-plt.savefig('E:\\new/1.1.svg')
+
+#plt.savefig('E:\\new/1.1.svg')
 plt.show()
 
-
-
-# Построение общего графика функции при x > 0
+# 1.2 Построение общего графика функции при x > 0
 fig = plt.figure(figsize=(8, 8))
 xpos = np.linspace(0.0001, 5, 501)
 y1pos = f(xpos, 1, 1)
@@ -169,11 +166,10 @@ ax_max.plot(xmax, y2max, 'g', label='$\\alpha = 2, \\beta = 1$', linewidth=0.7)
 ax_max.plot(xmax, y3max, 'b', label='$\\alpha = 1, \\beta = 2$', linewidth=0.7)
 ax_max.set_title('График при больших x')
 
-plt.savefig('E:\\new/1.2.svg')
+#plt.savefig('E:\\new/1.2.svg')
 plt.show()
 
-
-# Построение общего графика функции при x < 0
+# 1.3 Построение общего графика функции при x < 0
 fig = plt.figure(figsize=(8, 8))
 xneg = np.linspace(-15, 0, 501)
 y1neg = f(xneg, 1, 1)
@@ -203,17 +199,15 @@ ax_min.set_title('График при x -> $-\\infty$')
 ax_min.set_xlim(-1000, 0)
 ax_min.set_ylim(0.98, 1.01)
 
-plt.savefig('E:\\new/1.3.svg')
-plt.show()
-
+#plt.savefig('E:\\new/1.3.svg')
 print('График представляет собой гиперболическую кривую. При положительных целых значениях альфы и беты основные отличия складываются в зависимости от четности значения беты. '
       'У всего данного семейства кривых при x -> -inf предел стремится к 1, а при +inf - к 0. Также есть разрыв в точке x=0. При четном значении беты двухсторонее стремление к +inf. '
       'При нечетном - предел слева стремится к -inf, справа - к +inf. Кривые с одинаковым параметром беты никогда не пересекутся. '
       'Пересечение кривых с разным значением беты возможно. При нечентом значении беты функция убывает на всем промежутке, при четном - возрастает при х от -inf до 0 и убывает от 0 до +inf')
 
+plt.show()
 
-
-# Построение общего графика функции при вырождении
+# 2. Построение общего графика функции при вырождении
 x = np.linspace(-5, 5, 501)
 
 fig = plt.figure(figsize=(8, 8))
@@ -228,13 +222,13 @@ plt.title('График функции $f(x) = \\frac{x ^\\beta + \\alpha^\\beta
 plt.axhline(y=0, ls='--', color='k')
 plt.axvline(x=0, ls='--', color='k')
 plt.legend()
+
+#plt.savefig('E:\\new/2.svg')
 print('При бета=0 график функции вырождается до y=2, при альфа=0 - до y=1. При бета=-1 функция принимает вид линейной y=1/alpha * x + 1, где угол наклона 1/alpha, свободный член +1')
-plt.savefig('E:\\new/2.svg')
+
 plt.show()
 
-
-
-# Построение общего графика функции при альфа=1
+# 3. Построение общего графика функции при альфа=1
 x = np.linspace(-5, 5, 501)
 
 fig = plt.figure(figsize=(8, 8))
@@ -249,14 +243,14 @@ plt.title('График функции $f(x) = \\frac{x ^\\beta + \\alpha^\\beta
 plt.ylim(0, 5)
 plt.legend()
 
+#plt.savefig('E:\\new/3.svg')
 print('При альфа=1 на промежутке х от 0 до +inf: при бета=0.5 график убывает, функция является вогнутой; '
       'при бета=-0.5 график возрастает, функция выпуклая; при бета=-1.5 график позрастает, функция вогнутая. '
       'Все графики функций пересекаются в точке x=1')
-plt.savefig('E:\\new/3.svg')
+
 plt.show()
 
-
-# Построение общего графика функции при альфа=1
+# 4. Построение общего графика функции при альфа=1
 x = np.linspace(0, 20, 501)
 
 
@@ -278,95 +272,9 @@ axes[2].legend(loc='lower right')
 
 fig.suptitle('График функции $f(x) = \\frac{x ^\\beta + \\alpha^\\beta}{x^\\beta}$ при различных $\\beta$ и $\\alpha$=1', fontsize=15)
 
+#plt.savefig('E:\\new/4.svg')
 print('При альфа=1 на промежутке х от 0 до +inf: при 0<бета<1 график убывает, функция является вогнутой; '
       'при -1<бета<0 график возрастает, функция выпуклая; при бета<-1 график позрастает, функция вогнутая. '
       'Все графики функций пересекаются в точке x=1')
-plt.savefig('E:\\new/4.svg')
+
 plt.show()
-
-
-
-# Построение общего графика функции при x > 0
-fig = plt.figure(figsize=(8, 8))
-xpos = np.linspace(0.0001, 5, 501)
-y1pos = f(xpos, 1, 1)
-y2pos = f(xpos, 2, 1)
-y3pos = f(xpos, 1, 2)
-ax_main = fig.add_axes([0.1, 0.05, 0.85, 0.85])
-ax_main.plot(xpos, y1pos, 'r', label='$\\alpha = 1, \\beta = 1$', linewidth=0.7)
-ax_main.plot(xpos, y2pos, 'g', label='$\\alpha = 2, \\beta = 1$', linewidth=0.7)
-ax_main.plot(xpos, y3pos, 'b', label='$\\alpha = 1, \\beta = 2$', linewidth=0.7)
-plt.xlabel('x')
-plt.ylabel('f(x)')
-ax_main.set_title('График функции $f(x) = \\frac{x ^\\beta + \\alpha^\\beta}{x^\\beta}$ при различных $\\alpha$ и $\\beta$, x > 0', fontsize=15)
-ax_main.set_ylim(0, 20)
-ax_main.legend(loc = 'right')
-
-# Построение врезки графика функции при x > 0 и малых значениях х
-xmin = np.linspace(0, 2.5, 100)
-y1min = f(xmin, 1, 1)
-y2min = f(xmin, 2, 1)
-y3min = f(xmin, 1, 2)
-ax_min = fig.add_axes([0.3, 0.6, 0.25, 0.2])
-ax_min.plot(xmin, y1min, 'r', label='f1(x) при $\\alpha = 1, \\beta = 1$', linewidth=0.7)
-ax_min.plot(xmin, y2min, 'g', label='f2(x) при $\\alpha = 2, \\beta = 1$', linewidth=0.7)
-ax_min.plot(xmin, y3min, 'b', label='f3(x) при $\\alpha = 1, \\beta = 2$', linewidth=0.7)
-ax_min.set_title('График при малых x')
-ax_min.set_ylim(0.3, 10)
-
-ax_min.plot(0.5, 5, 'r.', label='Точка пересечения f2(x) и f3(x)')
-ax_min.plot(1, 2, 'g.', label='Точка пересечения f1(x) и f3(x)')
-ax_min.legend(bbox_to_anchor  = (2.4,1.2), loc = 'upper right')
-
-# Построение врезки графика функции при x > 0 и больших значениях х
-xmax = np.linspace(10000, 100000, 100)
-y1max = f(xmax, 1, 1)
-y2max = f(xmax, 2, 1)
-y3max = f(xmax, 1, 2)
-ax_max = fig.add_axes([0.5, 0.25, 0.25, 0.2])
-ax_max.plot(xmax, y1max, 'r', label='$\\alpha = 1, \\beta = 1$', linewidth=0.7)
-ax_max.plot(xmax, y2max, 'g', label='$\\alpha = 2, \\beta = 1$', linewidth=0.7)
-ax_max.plot(xmax, y3max, 'b', label='$\\alpha = 1, \\beta = 2$', linewidth=0.7)
-ax_max.set_title('График при больших x')
-
-plt.savefig('E:\\new/1.2.svg')
-plt.show()
-
-
-# Построение общего графика функции при x < 0
-fig = plt.figure(figsize=(8, 8))
-xneg = np.linspace(-15, 0, 501)
-y1neg = f(xneg, 1, 1)
-y2neg = f(xneg, 2, 1)
-y3neg = f(xneg, 1, 2)
-ax_main = fig.add_axes([0.1, 0.05, 0.85, 0.85])
-ax_main.plot(xneg, y1neg, 'r', label='$\\alpha = 1, \\beta = 1$', linewidth=0.7)
-ax_main.plot(xneg, y2neg, 'g', label='$\\alpha = 2, \\beta = 1$', linewidth=0.7)
-ax_main.plot(xneg, y3neg, 'b', label='$\\alpha = 1, \\beta = 2$', linewidth=0.7)
-plt.xlabel('x')
-plt.ylabel('f(x)')
-ax_main.set_ylim(-15, 15)
-ax_main.set_title('График функции $f(x) = \\frac{x ^\\beta + \\alpha^\\beta}{x^\\beta}$ при различных $\\alpha$ и $\\beta$, x < 0', fontsize=15)
-ax_main.axhline(y=0, ls='--', color='y', label='f(x)=0')
-ax_main.legend(loc = 'upper left')
-
-# Построение врезки графика функции при x < 0 при x-> -inf
-xmin = np.linspace(-1000, 0, 100)
-y1min = f(xmin, 1, 1)
-y2min = f(xmin, 2, 1)
-y3min = f(xmin, 1, 2)
-ax_min = fig.add_axes([0.2, 0.15, 0.45, 0.2])
-ax_min.plot(xmin, y1min, 'r', label='f1(x) при $\\alpha = 1, \\beta = 1$', linewidth=0.7)
-ax_min.plot(xmin, y2min, 'g', label='f2(x) при $\\alpha = 2, \\beta = 1$', linewidth=0.7)
-ax_min.plot(xmin, y3min, 'b', label='f3(x) при $\\alpha = 1, \\beta = 2$', linewidth=0.7)
-ax_min.set_title('График при x -> $-\\infty$')
-ax_min.set_xlim(-1000, 0)
-ax_min.set_ylim(0.98, 1.01)
-
-plt.savefig('E:\\new/1.3.svg')
-plt.show()
-
-print('График представляет собой гиперболическую кривую. Основные отличия складываются в зависимости от четности значения беты'
-      'У всего семейства кривых при x -> -inf предел стремится к 1, а при +inf - к нулю. Также есть разрыв в точке x=0. При четном значении беты двухсторонее стремление к +inf.'
-      'При нечетном - предел слева стремится к -inf, справа - к +inf. Кривые с одинаковым параметром беты никогда не пересекутся'
-      'Пересечение кривых с разным значением беты возможно')
