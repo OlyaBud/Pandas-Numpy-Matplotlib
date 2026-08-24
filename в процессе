@@ -69,3 +69,55 @@ plt.show()
 '''
 print('Самые загруженные часы: с 7 до 15 с перерывами в районе 10 и 13 часов. Загрузка файлов вообще не ведется в вечерне-ночное время с 22 до 3 включительно.')
 print('По дням недели: самый загруженный день - понедельник, наименее - суббота. Загрузка вообще не ведется в воскресение')
+
+# Задача 3
+df3 = df.groupby('ProjectID')['TypeDocs'].value_counts().reset_index()
+'''
+fig, axes = plt.subplots(1, 2, figsize=(16, 8))
+
+types = sorted(df3['TypeDocs'].unique())
+palette_colors = sns.color_palette('deep', len(types))
+fixed_palette = dict(zip(types, palette_colors))
+
+sns.countplot(df, x='TypeDocs', order=types, hue='TypeDocs', palette=fixed_palette, ax=axes[0])
+axes[0].tick_params(axis='x', labelrotation=30, labelsize=8)
+axes[0].set_title('Распределение общего количества документов в зависимости от вида файлов')
+axes[0].set_xlabel('Виды документов')
+axes[0].set_ylabel('Количество файлов')
+
+sns.boxplot(df3, x='TypeDocs', y='count', hue='TypeDocs', palette=fixed_palette, order = types, ax=axes[1])
+axes[1].set_yscale('log')
+axes[1].set_title('Распределение среднего количества документов в зависимости от вида файлов')
+axes[1].set_xlabel('Виды документов')
+axes[1].set_ylabel('Количество файлов')
+axes[1].tick_params(axis='x', labelrotation=30, labelsize=8)
+plt.tight_layout()
+plt.show()
+'''
+print('Крайне бесполезный раздел - №7, он почти не используется (необходимо убрать в "Другие виды")')
+print('Самый используемый раздел - №1, возможно его стоит раздробить')
+# Задача 4
+df4 = df.groupby('ProjectID')['FileSize'].sum()
+'''
+pic = sns.histplot(df4, bins=20, shrink=0.5, log_scale=True, kde=True)
+pic.set_xlim(5 * 10**5, 6* 10**9)
+pic.set_yticks(np.arange(0, 12, 2))
+pic.set_xscale('log')
+pic.set_title('Гистограмма суммарного объёма файлов по проектам (лог.шкала)')
+pic.set_xlabel('Общий объем файлов в проекте (лог.шкала)')
+pic.set_ylabel('Количество проектов с соответствующим объемом')
+plt.show()
+'''
+# Задача 5
+print(df.sort_values(by='FileSize').head(50))
+fig = plt.figure(figsize=(16,8))
+pic = sns.boxplot(df, x='CompanyID', y='FileSize', hue='CompanyID', palette='deep', legend=False)
+pic.set_yscale('log')
+pic.set_xlabel('Номер компании')
+pic.set_ylabel('Средний размер загружаемых файлов (лог.шкала)')
+pic.tick_params(axis='x', labelrotation=45, labelsize=8)
+pic.set_title('Распределение размеров загружаемых файлов по компаниям (лог.шкала)')
+plt.show()
+print('В разных компаниях разный подход к загрузке файлов. Например, файлы небольшого размера загружает только компания №703124. Возможно ей стоит выкладывать объединенные файлы')
+
+# Задача 6
