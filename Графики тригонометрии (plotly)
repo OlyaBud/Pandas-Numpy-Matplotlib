@@ -1,0 +1,57 @@
+'''
+Постройте графики 2 функций:
+
+f(x) = sin(x)
+g(x) = 1 - cos(x)
+Для x на отрезке [-2𝜋; 2𝜋]
+
+Отметьте отдельными маркерами точки пересечения графиков. Оба графика должны проходить через точку пересечения при любом приближении 
+(т.е. найдите точки пересечения с абсолютной точностью и добавьте как значения аргумента, так и значение функции в список по которому строится кривая).
+'''
+
+
+
+import matplotlib.pyplot as plt
+import plotly
+import plotly.express as px
+import plotly.graph_objs as go
+import pandas as pd
+import numpy as np
+
+def f(x):
+    return np.round(np.sin(x), 5)
+def g(x):
+    return np.round(1 - np.cos(x),5)
+
+
+x = np.arange(-2.5 * np.pi, 2.5 * np.pi, np.pi/2**10)
+interx = [-2*np.pi, -3*np.pi/2, 0, np.pi/2, 2*np.pi]  # Корни уравнения f(x) = g(x)
+
+fig = go.Figure()
+fig.add_trace(go.Scatter(x=x, y=f(x), name='f(x) = sin(x)'))
+fig.add_trace(go.Scatter(x=x, y=g(x), name='g(x) = 1 - cos(x)'))
+fig.add_trace(go.Scatter(x=interx, y=f(interx),
+                         mode='markers',
+                         marker=dict(size=10, color='black'),
+                         name='Точки пересечения'))
+fig.update_xaxes(range=[-2 * np.pi, 2 * np.pi+0.001],
+                 zeroline=True,
+                 zerolinewidth=2,
+                 zerolinecolor='grey')
+fig.update_yaxes(range=[-1.5, 2.5],
+                 zeroline=True,
+                 zerolinewidth=2,
+                 zerolinecolor='grey')
+fig.update_layout(title="Исследование двух тригонометрических функций на отрезке [-2𝝅, +2𝝅]",
+                  xaxis_title="x",
+                  yaxis_title="y",
+                  font=dict(size=16),
+                  title_font_size=25,
+                  xaxis=dict(
+                        tickmode='array',
+                        tickvals=np.arange(-2 * np.pi, 2 * np.pi +0.001, np.pi/2),
+
+                        ticktext=[f'{k}𝝅' for k in np.arange(-2, 2.5, 0.5)]
+                  ))
+fig.update_traces(hovertemplate="x: %{x}<br>y: %{y}")
+fig.show()
