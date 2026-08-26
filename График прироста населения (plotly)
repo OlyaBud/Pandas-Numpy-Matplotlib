@@ -1,0 +1,56 @@
+'''
+Постройте линейный график прироста населения. Подпишите оси и заголовок.
+Не выводите легенду.
+
+Добавьте для маркеров цветовую идентификацию:
+позитивный прирост населения обозначьте зелёным
+негативный прирост (убыль) обозначьте красным
+
+Для того чтобы задать конкретные цвета цветовой шкалы изучите colorscale в документации https://plotly.com/python/colorscales/
+
+Оформите подсказку при наведении курсора на точку в формате:
+
+xxxx г
+Прирост населения: yyyyyy
+'''
+
+
+
+import numpy as np
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+import pandas as pd
+
+s = (pd.read_csv(r'E:\\new/Общий_прирост_постоянного_населения.csv', sep=';').iloc[-1]
+                                                .rename('growth')
+                                                .astype(str)
+                                                .str.replace(pat=r',(\d)*', repl='', regex=True)
+                                                .astype(int))
+
+red = s.where(s < 0).dropna()
+green = s.where(s > 0).dropna()
+
+fig = go.Figure()
+fig.add_trace(go.Scatter(x=s.index, y=s,
+                         name='Прирост населения РФ по годам',
+                         mode='lines',
+                         hovertemplate = "%{x}<br>Прирост населения: %{y}"))
+fig.add_trace(go.Scatter(x=red.index, y=s[red.index],
+                         name='Прирост населения РФ по годам',
+                         mode='markers',
+                         marker=dict(color='red', size=16),
+                         hovertemplate = "%{x}<br>Убыль населения: %{y}"))
+fig.add_trace(go.Scatter(x=green.index, y=s[green.index],
+                         name='Прирост населения РФ по годам',
+                         mode='markers',
+                         marker=dict(color='green', size=16),
+                         hovertemplate = "%{x}<br>Прирост населения: %{y}"))
+fig.update_xaxes(tickangle=-45,
+                 title='Год')
+fig.update_yaxes(zeroline=True,
+                 zerolinecolor='grey',
+                 zerolinewidth=0.8,
+                 title='Прирост населения')
+fig.update_layout(showlegend=False,
+                  title='Прирост населения РФ по годам')
+fig.show()
