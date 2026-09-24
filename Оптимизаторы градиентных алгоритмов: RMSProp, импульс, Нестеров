@@ -1,0 +1,38 @@
+'''
+Реализуйте метод градиентного спуска для нахождения минимума функции с применением методов оптимизации RMSProp, импульса и Нестерова
+'''
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+def func(x):
+    return 2 * x + 0.1 * x ** 2 + np.cos(3*x)
+def df(x):
+    return 2 + 0.4 * x - 3 * np.sin(3*x)
+nu=0.85
+xRMSProp=4.0
+xNesterov=4.0
+ximpuls=4.0
+N=200
+alpha=0.8
+G=0
+eps=0.01
+imp=0
+nest=0
+
+plt.plot(np.arange(-15, 5, 0.01), func(np.arange(-15, 5, 0.01)), c='k')
+for _ in range(N):
+    G = alpha * G + (1-alpha) * df(xRMSProp) * df(xRMSProp)
+    xRMSProp = xRMSProp - nu * df(xRMSProp) / (G**0.5 + eps)
+    plt.scatter(xRMSProp, func(xRMSProp), alpha=0.2, c='r')
+    imp = alpha * imp + (1-alpha) * nu * df(ximpuls)
+    ximpuls = ximpuls - imp
+    plt.scatter(ximpuls, func(ximpuls), alpha=0.2, c='g')
+    nest = alpha * nest + (1-alpha) * nu * df(xNesterov - alpha * nest)
+    xNesterov = xNesterov - nest
+    plt.scatter(xNesterov, func(xNesterov), alpha=0.2, c='b')
+for x, name in zip((xRMSProp, ximpuls, xNesterov), ('RMSProp', 'Impuls', 'Nesterov')):
+    plt.scatter(x, func(x), marker='x', c='k')
+    plt.text(x-1, func(x)+2, f'{name}\n{round(x,2)}')
+plt.show()
